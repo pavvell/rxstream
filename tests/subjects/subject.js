@@ -25,7 +25,7 @@ describe("Subjects", function() {
 
   describe("ReplaySubject", function() {
     it("new subscribers receive all values that's been sent before", function(done) {
-
+      console.log('run...');
       let replayClicks$ = new ReplaySubject();
       let send = [1,2, {name: 'Lisa'}];
       let received = [];
@@ -52,7 +52,6 @@ describe("Subjects", function() {
       send.forEach(item => lastClick$.next(item));
 
       lastClick$.subscribe((item) => {
-        console.log(item);
         assert.equal(item, send.pop());
         done();
       });
