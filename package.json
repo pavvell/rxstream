@@ -1,5 +1,5 @@
 {
-  "name": "rxjs",
+  "name": "RxSlim",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -11,9 +11,6 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "webpack": "^2.6.1"
-  },
-  "dependencies": {
-    "lodash": "^4.17.4"
+    "webpack": "3.0.0"
   }
 }
