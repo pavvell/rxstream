@@ -21,11 +21,35 @@ describe("Subjects", function() {
 
       send.forEach(item => clicks$.next(item));
     });
+
+    it("unsubscribe from subscription", function(done) {
+      let clicks$ = new Subject();
+      let received = [];
+
+      let subscription = clicks$.subscribe((click) => {
+        received.push(click);
+      });
+
+      clicks$.next(1);
+      assert.equal(received[0], 1);
+
+      clicks$.next(2);
+      assert.equal(received[1], 2);
+
+      subscription.unsubscribe();
+
+      clicks$.next(3);
+      assert.equal(received.length, 2);
+
+      clicks$.next(4);
+      assert.equal(received.length, 2);
+
+      done();
+    });
   });
 
   describe("ReplaySubject", function() {
     it("new subscribers receive all values that's been sent before", function(done) {
-      console.log('run...');
       let replayClicks$ = new ReplaySubject();
       let send = [1,2, {name: 'Lisa'}];
       let received = [];
