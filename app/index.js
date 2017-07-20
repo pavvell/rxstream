@@ -1,22 +1,15 @@
 import Subject from '../lib/subjects/subject';
-import ReplaySubject from '../lib/subjects/replaySubject';
-import BehaviorSubject from '../lib/subjects/behaviourSubject';
+import merge from '../lib/operators/merge';
 
-let replayClicks$ = new Subject();
+let first$ = new Subject();
+let second$ = new Subject();
+let merged$ = merge(Subject, [first$, second$]);
 
-var subscription = replayClicks$.subscribe((click) => {
-  console.log('new replayable click arrived...', click);
-});
+let received = [];
 
-replayClicks$.next('one');
-replayClicks$.next('two');
+merged$.subscribe(value => received.push(value));
 
-console.log('subscription...', subscription);
+first$.next(1);
+second$.next(2);
 
-/*
-var i = 10;
-setInterval(() => {
-  replayClicks$.next(i++);
-  subscription.unsubscribe();
-}, 1000);
-*/
+console.log('received', received);
