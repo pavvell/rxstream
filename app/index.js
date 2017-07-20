@@ -1,23 +1,15 @@
 import { Subject } from '../lib/subjects/subject';
-import { BehaviorSubject } from '../lib/subjects/behaviourSubject';
-import { merge } from '../lib/operators/merge';
+import { filter } from '../lib/operators/filter';
 
-let first$ = new Subject();
-let second$ = new BehaviorSubject();
+let numbers$ = new Subject();
 
-second$.next(0);
-
-let merged$ = merge(Subject, [first$, second$]);
-let received = [];
-
-second$.subscribe(value => console.log('direct subscribe...', value));
-
-merged$.subscribe(value => {
-  received.push(value);
-  console.log('received...', value);
+let oddNumbers$ = filter(Subject, numbers$, (click) => {
+  return click % 2 === 0;
 });
 
-first$.next(1);
-second$.next(2);
+oddNumbers$.subscribe(num => console.log(num));
 
-console.log('received', received);
+numbers$.next(1);
+numbers$.next(2);
+numbers$.next(3);
+numbers$.next(4);
