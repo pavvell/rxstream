@@ -1,4 +1,4 @@
-# RxStream v2.1.2
+# RxStream
 
 If all you need is just a stream (RxJS Subject). Very lightweight and tree-shaking friendly.
 
