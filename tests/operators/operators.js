@@ -1,8 +1,8 @@
-import { Subject } from '../../lib/subjects/subject';
-import { BehaviorSubject } from '../../lib/subjects/behaviourSubject';
-import { ReplaySubject } from '../../lib/subjects/replaySubject';
-import { merge } from '../../lib/operators/merge';
-import { filter } from '../../lib/operators/filter';
+import { Subject } from '../../es5/subjects/subject';
+import { BehaviorSubject } from '../../es5/subjects/behaviourSubject';
+import { ReplaySubject } from '../../es5/subjects/replaySubject';
+import { merge } from '../../es5/operators/merge';
+import { filter } from '../../es5/operators/filter';
 
 describe("operators", function() {
 

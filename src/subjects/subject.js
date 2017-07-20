@@ -1,7 +1,7 @@
 import Subscription from '../classes/subscription';
 
 export function Subject() {
-  var _subscriptionList = [];
+  let _subscriptionList = [];
 
   this.subscriptionList = function(subscriptionList) {
     if (subscriptionList instanceof Array) {
