@@ -1,5 +1,5 @@
 export function merge(SubjectConstructor, subjectList) {
-  var stream$ = new SubjectConstructor();
+  let stream$ = new SubjectConstructor();
 
   subjectList.forEach(function (subject) {
     subject.subscribe(payload => stream$.next(payload));

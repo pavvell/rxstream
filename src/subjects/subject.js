@@ -19,7 +19,7 @@ Subject.prototype.next = function(data) {
 };
 
 Subject.prototype.subscribe = function(callback) {
-  var subscription = new Subscription(this, callback);
+  let subscription = new Subscription(this, callback);
   this.subscriptionList().push(subscription);
 
   return subscription;

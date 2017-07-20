@@ -2,7 +2,7 @@ import { Subject } from './subject';
 
 export function BehaviorSubject() {
   Subject.apply(this, arguments);
-  var _lastCallArgs = null;
+  let _lastCallArgs = null;
 
   this.next = function(data) {
     _lastCallArgs = arguments;
