@@ -1,7 +1,7 @@
-import Subject from '../../lib/subjects/subject';
-import BehaviorSubject from '../../lib/subjects/behaviourSubject';
-import ReplaySubject from '../../lib/subjects/replaySubject';
-import merge from '../../lib/operators/merge';
+import { Subject } from '../../lib/subjects/subject';
+import { BehaviorSubject } from '../../lib/subjects/behaviourSubject';
+import { ReplaySubject } from '../../lib/subjects/replaySubject';
+import { merge } from '../../lib/operators/merge';
 
 describe("operators", function() {
 

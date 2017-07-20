@@ -1,6 +1,6 @@
-import Subject from '../../lib/subjects/subject';
-import ReplaySubject from '../../lib/subjects/replaySubject';
-import BehaviorSubject from '../../lib/subjects/behaviourSubject';
+import { Subject } from '../../lib/subjects/subject';
+import { ReplaySubject } from '../../lib/subjects/replaySubject';
+import { BehaviorSubject } from '../../lib/subjects/behaviourSubject';
 
 describe("Subjects", function() {
 

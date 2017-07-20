@@ -1,6 +1,6 @@
-import Subject from '../lib/subjects/subject';
-import BehaviorSubject from '../lib/subjects/behaviourSubject';
-import merge from '../lib/operators/merge';
+import { Subject } from '../lib/subjects/subject';
+import { BehaviorSubject } from '../lib/subjects/behaviourSubject';
+import { merge } from '../lib/operators/merge';
 
 let first$ = new Subject();
 let second$ = new BehaviorSubject();

@@ -1,5 +1,5 @@
-export * from './lib/subjects/subject';
-export * from './lib/subjects/behaviourSubject';
-export * from './lib/subjects/replaySubject';
+export { Subject } from './lib/subjects/subject';
+export { BehaviorSubject } from './lib/subjects/behaviourSubject';
+export { ReplaySubject } from './lib/subjects/replaySubject';
 
-export * from './lib/operators/merge';
+export { merge } from './lib/operators/merge';
