@@ -15,6 +15,8 @@ Not yet
 
 ## Example
 ```javascript
+import { Subject } from 'rxstream';
+
 let stream$ = new Subject();
 stream$.subscribe(value => console.log(value));
 stream$.next(1); // 1
