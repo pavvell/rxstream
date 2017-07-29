@@ -1,6 +1,4 @@
-[![Documentation](https://doc.esdoc.org/github.com/pavvell/rxstream/badge.svg)][docs]
-
-***
+![Documentation](https://doc.esdoc.org/github.com/pavvell/rxstream/badge.svg)
 
 # RxStream
 
