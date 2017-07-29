@@ -1,6 +1,6 @@
 # RxStream
 
-If all you need is just a stream (RxJS Subject). Very lightweight and tree-shaking friendly.
+If all you need is just a stream (RxJS Subject). Very lightweight (1.5Kb gzipped) and tree-shaking friendly.
 
 ## Installation
 
