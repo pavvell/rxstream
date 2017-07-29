@@ -1,0 +1,47 @@
+{
+  "coverage": "70%",
+  "expectCount": 20,
+  "actualCount": 14,
+  "files": {
+    "src/subjects/behaviourSubject.js": {
+      "expectCount": 4,
+      "actualCount": 3,
+      "undocumentLines": [
+        25
+      ]
+    },
+    "src/subjects/replaySubject.js": {
+      "expectCount": 5,
+      "actualCount": 3,
+      "undocumentLines": [
+        28,
+        26
+      ]
+    },
+    "src/subjects/subject.js": {
+      "expectCount": 6,
+      "actualCount": 4,
+      "undocumentLines": [
+        17,
+        26
+      ]
+    },
+    "src/classes/subscription.js": {
+      "expectCount": 3,
+      "actualCount": 2,
+      "undocumentLines": [
+        7
+      ]
+    },
+    "src/operators/filter.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
+    },
+    "src/operators/merge.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
+    }
+  }
+}

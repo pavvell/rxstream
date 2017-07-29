@@ -1,5 +1,5 @@
-import { Subject } from '../lib/subjects/subject';
-import { filter } from '../lib/operators/filter';
+import { Subject } from '../index';
+import { filter } from '../index';
 
 let numbers$ = new Subject();
 

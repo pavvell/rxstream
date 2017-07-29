@@ -1,16 +1,29 @@
-export default function Subscription (parentSubject, callback) {
-  var _callback = callback;
-  var _isStopped = false;
+/**
+ * Subscription is returned when you subscribe on stream.
+ * @experimental
+ * @class Subscription<T>
+ */
+export default class Subscription {
+  constructor(parentSubject, callback) {
+    this._callback = callback;
+    this._isStopped = false;
+  }
 
-  this.execute = function(data) {
-    if (_isStopped) {
+  /**
+   * @private
+   */
+  _execute(data) {
+    if (this._isStopped) {
       return;
     }
 
-    _callback(data);
+    this._callback(data);
   };
 
-  this.unsubscribe = function() {
-    _isStopped = true;
+  /**
+   * Unsubscribe from the stream
+   */
+  unsubscribe() {
+    this._isStopped = true;
   }
 }
