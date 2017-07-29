@@ -1,3 +1,7 @@
+[![Documentation](https://doc.esdoc.org/github.com/pavvell/rxstream/badge.svg)][docs]
+
+***
+
 # RxStream
 
 If all you need is just a stream (RxJS Subject). Very lightweight (1.5Kb gzipped) and tree-shaking friendly.

@@ -3,7 +3,7 @@
   "version": "1.2.6",
   "description": "",
   "main": "index.js",
-  "repository" : {
+  "repository": {
     "type" : "git",
     "url" : "https://github.com/pavvell/rxstream.git"
   },
