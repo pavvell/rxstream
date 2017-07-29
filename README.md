@@ -11,7 +11,9 @@ $ npm i --save rxstream
 ```
 
 ## GitHub / Documentation
-Not yet
+[Documentation](https://doc.esdoc.org/github.com/pavvell/rxstream/)
+
+[GitHub](https://github.com/pavvell/rxstream)
 
 ## Example
 ```javascript

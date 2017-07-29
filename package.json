@@ -1,8 +1,12 @@
 {
   "name": "rxstream",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "description": "",
   "main": "index.js",
+  "repository" : {
+    "type" : "git",
+    "url" : "https://github.com/pavvell/rxstream.git"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build-prod": "NODE_ENV=production ./node_modules/.bin/webpack --config webpack.config.js --watch",
