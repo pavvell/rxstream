@@ -3,6 +3,7 @@ import { BehaviorSubject } from '../../es5/subjects/behaviourSubject';
 import { ReplaySubject } from '../../es5/subjects/replaySubject';
 import { merge } from '../../es5/operators/merge';
 import { filter } from '../../es5/operators/filter';
+import { combineLatest } from '../../es5/operators/combineLatest';
 
 describe("operators", function() {
 
@@ -138,5 +139,52 @@ describe("operators", function() {
       done();
     });
 
+  });
+
+  describe("combineLatest", function() {
+    it("should combine latest values of mixed streams", function(done) {
+      let letters$ = new Subject();
+      let numbers$ = new Subject();
+      let received = [];
+
+      let latest$ = combineLatest(Subject, [letters$, numbers$]);
+      latest$.subscribe(value => received.push(value));
+
+      letters$.next('a');
+      numbers$.next(1);
+      letters$.next('b');
+      numbers$.next(2);
+      numbers$.next(3);
+      numbers$.next(4);
+      letters$.next('c');
+      letters$.next('d');
+      letters$.next('e');
+
+      assert.deepEqual(received[0], ['a', 1]);
+      assert.deepEqual(received[1], ['b', 1]);
+      assert.deepEqual(received[2], ['b', 2]);
+      assert.deepEqual(received[3], ['b', 3]);
+      assert.deepEqual(received[4], ['b', 4]);
+      assert.deepEqual(received[5], ['c', 4]);
+      assert.deepEqual(received[6], ['d', 4]);
+      assert.deepEqual(received[7], ['e', 4]);
+      done();
+    });
+
+    it("should not emit values if some streams not yet received any value", function(done) {
+      let letters$ = new Subject();
+      let numbers$ = new Subject();
+      let received = [];
+
+      let latest$ = combineLatest(Subject, [letters$, numbers$]);
+      latest$.subscribe(value => received.push(value));
+
+      letters$.next('a');
+      assert.deepEqual(received, []);
+
+      numbers$.next(1);
+      assert.deepEqual(received[0], ['a', 1]);
+      done();
+    });
   });
 });

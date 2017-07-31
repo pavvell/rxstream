@@ -1,7 +1,7 @@
 {
-  "coverage": "70%",
-  "expectCount": 20,
-  "actualCount": 14,
+  "coverage": "71.42%",
+  "expectCount": 21,
+  "actualCount": 15,
   "files": {
     "src/subjects/behaviourSubject.js": {
       "expectCount": 4,
@@ -32,6 +32,11 @@
       "undocumentLines": [
         7
       ]
+    },
+    "src/operators/combineLatest.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
     },
     "src/operators/filter.js": {
       "expectCount": 1,

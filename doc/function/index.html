@@ -19,7 +19,7 @@
   <a href="identifiers.html">Reference</a>
   <a href="source.html">Source</a>
   
-  
+  <a data-ice="repoURL" href="https://github.com/pavvell/rxstream.git" class="repo-url-github">Repository</a>
   <div class="search-box">
   <span>
     <img src="./image/search.png">
@@ -33,7 +33,8 @@
   <ul>
     
   <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">classes</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/classes/subscription.js~Subscription.html">Subscription</a></span></span></li>
-<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">operators</div><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-filter">filter</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">operators</div><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-combineLatest">combineLatest</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-filter">filter</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-merge">merge</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">subjects</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/subjects/behaviourSubject.js~BehaviorSubject.html">BehaviorSubject</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/subjects/replaySubject.js~ReplaySubject.html">ReplaySubject</a></span></span></li>
@@ -48,6 +49,35 @@
   <tbody>
   
   <tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          <span data-ice="name"><span><a href="function/index.html#static-function-combineLatest">combineLatest</a></span></span><span data-ice="signature">(SubjectConstructor: <span><a href="class/src/subjects/subject.js~Subject.html">Subject</a></span> | <span><a href="class/src/subjects/behaviourSubject.js~BehaviorSubject.html">BehaviorSubject</a></span> | <span><a href="class/src/subjects/replaySubject.js~ReplaySubject.html">ReplaySubject</a></span>, subjectList: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span>): <span><a href="class/src/subjects/subject.js~Subject.html">Subject</a></span> | <span><a href="class/src/subjects/behaviourSubject.js~BehaviorSubject.html">BehaviorSubject</a></span> | <span><a href="class/src/subjects/replaySubject.js~ReplaySubject.html">ReplaySubject</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Combines latest values of two or more streams, and returns new stream of an array filled with
+these values.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
     <td>
       <span class="access" data-ice="access">public</span>
       
@@ -108,6 +138,110 @@
 </div>
 <div data-ice="details"><h2 data-ice="title">Static Public </h2>
 
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="static-function-combineLatest">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span data-ice="name">combineLatest</span><span data-ice="signature">(SubjectConstructor: <span><a href="class/src/subjects/subject.js~Subject.html">Subject</a></span> | <span><a href="class/src/subjects/behaviourSubject.js~BehaviorSubject.html">BehaviorSubject</a></span> | <span><a href="class/src/subjects/replaySubject.js~ReplaySubject.html">ReplaySubject</a></span>, subjectList: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span>): <span><a href="class/src/subjects/subject.js~Subject.html">Subject</a></span> | <span><a href="class/src/subjects/behaviourSubject.js~BehaviorSubject.html">BehaviorSubject</a></span> | <span><a href="class/src/subjects/replaySubject.js~ReplaySubject.html">ReplaySubject</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/operators/combineLatest.js.html#lineNumber29">source</a></span></span>
+    </span>
+  </h3>
+
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {combineLatest} from &apos;<span><a href="file/src/operators/combineLatest.js.html#lineNumber29">rxstream/src/operators/combineLatest.js</a></span>&apos;</code></pre></div>
+  
+  
+  <div data-ice="description"><p>Combines latest values of two or more streams, and returns new stream of an array filled with
+these values. It will start emit latest values only when all streams has received at least one
+value.</p>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" data-depth="0">SubjectConstructor</td>
+      <td data-ice="type"><span><a href="class/src/subjects/subject.js~Subject.html">Subject</a></span> | <span><a href="class/src/subjects/behaviourSubject.js~BehaviorSubject.html">BehaviorSubject</a></span> | <span><a href="class/src/subjects/replaySubject.js~ReplaySubject.html">ReplaySubject</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>Pass a constructor of result stream of an array with latest values</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" data-depth="0">subjectList</td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>An array of subjects/streams latest values of which needs to be collected</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type" data-ice="returnType"><span><a href="class/src/subjects/subject.js~Subject.html">Subject</a></span> | <span><a href="class/src/subjects/behaviourSubject.js~BehaviorSubject.html">BehaviorSubject</a></span> | <span><a href="class/src/subjects/replaySubject.js~ReplaySubject.html">ReplaySubject</a></span></td>
+          
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  <div data-ice="example">
+    <h4>Example:</h4>
+    
+  <div class="example-doc" data-ice="exampleDoc">
+      
+      <pre class="prettyprint source-code"><code data-ice="exampleCode">import { Subject, combineLatest } from &apos;rxstream&apos;;
+
+let letters$ = new Subject();
+let numbers$ = new Subject();
+let latest$ = combineLatest(Subject, [letters$, numbers$]);
+
+latest$.subscribe(latest =&gt; console.log(latest));
+
+letters$.next(&apos;a&apos;); // no output, as numbers$ not yet received any value
+numbers$.next(1);   // [&apos;a&apos;, 1]
+letters$.next(&apos;b&apos;); // [&apos;b&apos;, 1]
+numbers$.next(2);   // [&apos;b&apos;, 2]
+numbers$.next(3);   // [&apos;b&apos;, 3]
+numbers$.next(4);   // [&apos;b&apos;, 4]
+letters$.next(&apos;c&apos;); // [&apos;c&apos;, 4]
+letters$.next(&apos;d&apos;); // [&apos;d&apos;, 4]</code></pre>
+    </div>
+</div>
+
+  
+
+  
+  
+</div>
 <div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="static-function-filter">
     <span class="access" data-ice="access">public</span>

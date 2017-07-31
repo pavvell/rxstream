@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/operators/filter.js | API Document</title>
+  <title data-ice="title">src/operators/combineLatest.js | API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -43,39 +43,59 @@
 </div>
 </nav>
 
-<div class="content" data-ice="content"><h1 data-ice="title">src/operators/filter.js</h1>
+<div class="content" data-ice="content"><h1 data-ice="title">src/operators/combineLatest.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/**
- * Filters one stream and returns another with only filtered values.
+ * Combines latest values of two or more streams, and returns new stream of an array filled with
+ * these values. It will start emit latest values only when all streams has received at least one
+ * value.
  *
  * @example
- * import { Subject, filter } from &apos;rxstream&apos;;
+ * import { Subject, combineLatest } from &apos;rxstream&apos;;
  *
+ * let letters$ = new Subject();
  * let numbers$ = new Subject();
- * let evenNumbers$ = filter(Subject, numbers$, (num) =&gt; num % 2 === 0);
+ * let latest$ = combineLatest(Subject, [letters$, numbers$]);
  *
- * evenNumbers$.subscribe(num =&gt; console.log(num));
+ * latest$.subscribe(latest =&gt; console.log(latest));
  *
- * numbers$.next(1);
- * numbers$.next(2);
- * numbers$.next(3);
- * numbers$.next(4);
+ * letters$.next(&apos;a&apos;); // no output, as numbers$ not yet received any value
+ * numbers$.next(1);   // [&apos;a&apos;, 1]
+ * letters$.next(&apos;b&apos;); // [&apos;b&apos;, 1]
+ * numbers$.next(2);   // [&apos;b&apos;, 2]
+ * numbers$.next(3);   // [&apos;b&apos;, 3]
+ * numbers$.next(4);   // [&apos;b&apos;, 4]
+ * letters$.next(&apos;c&apos;); // [&apos;c&apos;, 4]
+ * letters$.next(&apos;d&apos;); // [&apos;d&apos;, 4]
  *
- * // Output is going to be: 2, 4
- *
- * @function filter&lt;T&gt;
- * @param {Subject|BehaviorSubject|ReplaySubject} SubjectConstructor Pass a constructor of result/filtered stream
- * @param {Subject|BehaviorSubject|ReplaySubject} stream$ Stream to be filtered
- * @param {function(value: T): boolean} conditionCallback Predicate function, to test each element of the stream. Return true to keep the element, false otherwise
+ * @function combineLatest&lt;T&gt;
+ * @param {Subject|BehaviorSubject|ReplaySubject} SubjectConstructor Pass a constructor of result stream of an array with latest values
+ * @param {Array} subjectList An array of subjects/streams latest values of which needs to be collected
  * @returns {Subject|BehaviorSubject|ReplaySubject}
  */
-export function filter(SubjectConstructor, stream$, conditionCallback) {
-  let filteredStream$ = new SubjectConstructor();
+export function combineLatest(SubjectConstructor, subjectList) {
+  let resultStream$ = new SubjectConstructor();
+  let latestValues = [];
+  let initiated = new Array(subjectList.length).fill(false);
 
-  stream$.subscribe(function (payload) {
-    (conditionCallback(payload)) ? filteredStream$.next(payload) : null
+  function onValueArrived() {
+    let allSubjectsSentValuesAtLeastOnce = initiated.every(flag =&gt; flag === true);
+
+    if (!allSubjectsSentValuesAtLeastOnce) {
+      return;
+    }
+
+    resultStream$.next([].concat(latestValues));
+  }
+
+  subjectList.forEach(function (subject, index) {
+    subject.subscribe(payload =&gt; {
+      initiated[index] = true;
+      latestValues[index] = payload;
+      onValueArrived();
+    });
   });
 
-  return filteredStream$;
+  return resultStream$;
 }</code></pre>
 
 </div>

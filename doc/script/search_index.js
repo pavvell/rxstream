@@ -24,6 +24,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "rxstream/src/operators/combinelatest.js~combinelatest",
+    "function/index.html#static-function-combineLatest",
+    "<span>combineLatest</span> <span class=\"search-result-import-path\">rxstream/src/operators/combineLatest.js</span>",
+    "function"
+  ],
+  [
     "rxstream/src/operators/filter.js~filter",
     "function/index.html#static-function-filter",
     "<span>filter</span> <span class=\"search-result-import-path\">rxstream/src/operators/filter.js</span>",
@@ -382,6 +388,12 @@ window.esdocSearchIndex = [
     "class/src/classes/subscription.js~Subscription.html#instance-method-unsubscribe",
     "src/classes/subscription.js~Subscription#unsubscribe",
     "method"
+  ],
+  [
+    "src/operators/combinelatest.js",
+    "file/src/operators/combineLatest.js.html",
+    "src/operators/combineLatest.js",
+    "file"
   ],
   [
     "src/operators/filter.js",
