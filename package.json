@@ -8,11 +8,12 @@
     "url": "https://github.com/pavvell/rxstream.git"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "build-prod": "NODE_ENV=production ./node_modules/.bin/webpack --config webpack.config.js --watch",
     "build-dev": "./node_modules/.bin/webpack --config webpack.config.js --watch",
     "build-tests": "./node_modules/.bin/webpack --config webpack.tests.js --watch",
-    "build-es5": "node_modules/babel-cli/bin/babel.js src --out-dir es5"
+    "build-es5": "node_modules/babel-cli/bin/babel.js src --out-dir es5",
+    "build-docs": "esdoc",
+    "publish-docs": "cd ../rxjs-heroku; npm run rebuild; cd ../rxjs"
   },
   "author": "",
   "license": "ISC",
