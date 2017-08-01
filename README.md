@@ -10,10 +10,8 @@ $ npm i -g npm
 $ npm i --save rxstream
 ```
 
-## GitHub / Documentation
-[Documentation](https://doc.esdoc.org/github.com/pavvell/rxstream/)
-
-[GitHub](https://github.com/pavvell/rxstream)
+## Documentation
+[Documentation](https://rxstream.herokuapp.com/)
 
 ## Example
 ```javascript
