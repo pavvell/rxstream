@@ -2,16 +2,17 @@ export function debounce(SubjectConstructor, stream$, conditionStreamGenerator) 
   let debouncedStream$ = new SubjectConstructor();
   let latestValue = null;
   let latestSubscription;
+  let conditionStream$;
 
   stream$.subscribe((payload) => {
     console.log('subscribe...');
     latestValue = payload;
-    (latestSubscription) ? latestSubscription.unsubscribe() : null;
+    (conditionStream$) ? conditionStream$.unsubscribe(latestSubscription) : null;
 
-    let conditionStream$ = conditionStreamGenerator();
+    conditionStream$ = conditionStreamGenerator();
     latestSubscription = conditionStream$.subscribe(() => {
       debouncedStream$.next(latestValue);
-      latestSubscription.unsubscribe();
+      conditionStream$.unsubscribe(latestSubscription);
     });
   });
 
