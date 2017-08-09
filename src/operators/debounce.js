@@ -5,7 +5,6 @@ export function debounce(SubjectConstructor, stream$, conditionStreamGenerator) 
   let conditionStream$;
 
   stream$.subscribe((payload) => {
-    console.log('subscribe...');
     latestValue = payload;
     (conditionStream$) ? conditionStream$.unsubscribe(latestSubscription) : null;
 
