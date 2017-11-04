@@ -22,3 +22,9 @@ stream$.subscribe(value => console.log(value));
 stream$.next(1); // 1
 stream$.next(2); // 2
 ```
+## Tree-shaking
+To perform better tree-shaking, import what you need from its local module, for example:
+```javascript
+import { Subject } from 'rxstream/es5/subjects/subject';
+import { merge } from 'rxstream/es5/operators/merge';
+```
