@@ -30,6 +30,12 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
+    "rxstream/src/operators/debounce.js~debounce",
+    "function/index.html#static-function-debounce",
+    "<span>debounce</span> <span class=\"search-result-import-path\">rxstream/src/operators/debounce.js</span>",
+    "function"
+  ],
+  [
     "rxstream/src/operators/filter.js~filter",
     "function/index.html#static-function-filter",
     "<span>filter</span> <span class=\"search-result-import-path\">rxstream/src/operators/filter.js</span>",
@@ -393,6 +399,12 @@ window.esdocSearchIndex = [
     "src/operators/combinelatest.js",
     "file/src/operators/combineLatest.js.html",
     "src/operators/combineLatest.js",
+    "file"
+  ],
+  [
+    "src/operators/debounce.js",
+    "file/src/operators/debounce.js.html",
+    "src/operators/debounce.js",
     "file"
   ],
   [

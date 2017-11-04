@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/operators/merge.js | API Document</title>
+  <title data-ice="title">src/operators/debounce.js | API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -44,43 +44,53 @@
 </div>
 </nav>
 
-<div class="content" data-ice="content"><h1 data-ice="title">src/operators/merge.js</h1>
+<div class="content" data-ice="content"><h1 data-ice="title">src/operators/debounce.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/**
- * Merges two or more streams into one.
+ * Debounce delays values emitted by the source stream, and drops previous
+ * pending delayed emissions if a new value arrives on source stream.
  *
  * @example
- * import { Subject, BehaviorSubject, merge } from &apos;rxstream&apos;;
+ * import { Subject, debounce } from &apos;rxstream&apos;;
  *
- * let first$ = new BehaviorSubject();
- * let second$ = new Subject();
- * let merged$ = merge(Subject, [first$, second$])
+ * let clicks$ = new Subject();
+ * let debounced$ = debounce(Subject, clicks$, () =&gt; {
+ *  let timer$ = new Subject();
  *
- * first$.next(1);
+ *  setInterval(() =&gt; timer$.next(), 1000);
  *
- * merged$.subscribe(value =&gt; console.log(value));
- * first$.next(2);
- * second$.next(3);
- * second$.next(4);
+ *  return timer$;
+ * });
  *
- * // Output is going to be: 2, 3, 4.
- * // Notice that despite the fact that merged stream has BehaviorSubject
- * // we are getting in output only 2, 3 and 4 but not 1. This is because we specified
- * // that our result stream should be of type Subject, which does not remember
- * // previous values.
+ * document.addEventListener(&apos;click&apos;, (event) =&gt; {
+ *  clicks$.next(new Date());
+ * });
  *
- * @function merge&lt;T&gt;
- * @param {Subject|BehaviorSubject|ReplaySubject} SubjectConstructor Pass a constructor of result/merged stream
- * @param {Array} subjectList An array of subjects/streams to be merged
+ * debounced$.subscribe((event) =&gt; console.log(event));
+ *
+ * @function debounce&lt;T&gt;
+ * @param {Subject|BehaviorSubject|ReplaySubject} SubjectConstructor Pass a constructor of result/filtered stream
+ * @param {Subject|BehaviorSubject|ReplaySubject} stream$ Stream to be debounced
+ * @param {function(value: T): Subject} conditionStreamGenerator a function that should return a stream, when new value arrives on that stream, debounced stream emits latest value from the source stream
  * @returns {Subject|BehaviorSubject|ReplaySubject}
  */
-export function merge(SubjectConstructor, subjectList) {
-  let stream$ = new SubjectConstructor();
+export function debounce(SubjectConstructor, stream$, conditionStreamGenerator) {
+  let debouncedStream$ = new SubjectConstructor();
+  let latestValue = null;
+  let latestSubscription;
+  let conditionStream$;
 
-  subjectList.forEach(function (subject) {
-    subject.subscribe(payload =&gt; stream$.next(payload));
+  stream$.subscribe((payload) =&gt; {
+    latestValue = payload;
+    (conditionStream$) ? conditionStream$.unsubscribe(latestSubscription) : null;
+
+    conditionStream$ = conditionStreamGenerator();
+    latestSubscription = conditionStream$.subscribe(() =&gt; {
+      debouncedStream$.next(latestValue);
+      conditionStream$.unsubscribe(latestSubscription);
+    });
   });
 
-  return stream$;
+  return debouncedStream$;
 }</code></pre>
 
 </div>

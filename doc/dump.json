@@ -247,6 +247,92 @@
   {
     "__docId__": 10,
     "kind": "file",
+    "name": "src/operators/debounce.js",
+    "content": "/**\n * Debounce delays values emitted by the source stream, and drops previous\n * pending delayed emissions if a new value arrives on source stream.\n *\n * @example\n * import { Subject, debounce } from 'rxstream';\n *\n * let clicks$ = new Subject();\n * let debounced$ = debounce(Subject, clicks$, () => {\n *  let timer$ = new Subject();\n *\n *  setInterval(() => timer$.next(), 1000);\n *\n *  return timer$;\n * });\n *\n * document.addEventListener('click', (event) => {\n *  clicks$.next(new Date());\n * });\n *\n * debounced$.subscribe((event) => console.log(event));\n *\n * @function debounce<T>\n * @param {Subject|BehaviorSubject|ReplaySubject} SubjectConstructor Pass a constructor of result/filtered stream\n * @param {Subject|BehaviorSubject|ReplaySubject} stream$ Stream to be debounced\n * @param {function(value: T): Subject} conditionStreamGenerator a function that should return a stream, when new value arrives on that stream, debounced stream emits latest value from the source stream\n * @returns {Subject|BehaviorSubject|ReplaySubject}\n */\nexport function debounce(SubjectConstructor, stream$, conditionStreamGenerator) {\n  let debouncedStream$ = new SubjectConstructor();\n  let latestValue = null;\n  let latestSubscription;\n  let conditionStream$;\n\n  stream$.subscribe((payload) => {\n    latestValue = payload;\n    (conditionStream$) ? conditionStream$.unsubscribe(latestSubscription) : null;\n\n    conditionStream$ = conditionStreamGenerator();\n    latestSubscription = conditionStream$.subscribe(() => {\n      debouncedStream$.next(latestValue);\n      conditionStream$.unsubscribe(latestSubscription);\n    });\n  });\n\n  return debouncedStream$;\n}",
+    "static": true,
+    "longname": "src/operators/debounce.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1
+  },
+  {
+    "__docId__": 11,
+    "kind": "function",
+    "name": "debounce",
+    "memberof": "src/operators/debounce.js",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "src/operators/debounce.js~debounce",
+    "access": null,
+    "export": true,
+    "importPath": "rxstream/src/operators/debounce.js",
+    "importStyle": "{debounce}",
+    "description": "Debounce delays values emitted by the source stream, and drops previous\npending delayed emissions if a new value arrives on source stream.",
+    "examples": [
+      "import { Subject, debounce } from 'rxstream';\n\nlet clicks$ = new Subject();\nlet debounced$ = debounce(Subject, clicks$, () => {\n let timer$ = new Subject();\n\n setInterval(() => timer$.next(), 1000);\n\n return timer$;\n});\n\ndocument.addEventListener('click', (event) => {\n clicks$.next(new Date());\n});\n\ndebounced$.subscribe((event) => console.log(event));"
+    ],
+    "lineNumber": 29,
+    "unknown": [
+      {
+        "tagName": "@function",
+        "tagValue": "debounce<T>"
+      },
+      {
+        "tagName": "@returns",
+        "tagValue": "{Subject|BehaviorSubject|ReplaySubject}"
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "Subject",
+          "BehaviorSubject",
+          "ReplaySubject"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "SubjectConstructor",
+        "description": "Pass a constructor of result/filtered stream"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Subject",
+          "BehaviorSubject",
+          "ReplaySubject"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "stream$",
+        "description": "Stream to be debounced"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "function(value: T): Subject"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "conditionStreamGenerator",
+        "description": "a function that should return a stream, when new value arrives on that stream, debounced stream emits latest value from the source stream"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Subject",
+        "BehaviorSubject",
+        "ReplaySubject"
+      ],
+      "spread": false,
+      "description": ""
+    }
+  },
+  {
+    "__docId__": 12,
+    "kind": "file",
     "name": "src/operators/filter.js",
     "content": "/**\n * Filters one stream and returns another with only filtered values.\n *\n * @example\n * import { Subject, filter } from 'rxstream';\n *\n * let numbers$ = new Subject();\n * let evenNumbers$ = filter(Subject, numbers$, (num) => num % 2 === 0);\n *\n * evenNumbers$.subscribe(num => console.log(num));\n *\n * numbers$.next(1);\n * numbers$.next(2);\n * numbers$.next(3);\n * numbers$.next(4);\n *\n * // Output is going to be: 2, 4\n *\n * @function filter<T>\n * @param {Subject|BehaviorSubject|ReplaySubject} SubjectConstructor Pass a constructor of result/filtered stream\n * @param {Subject|BehaviorSubject|ReplaySubject} stream$ Stream to be filtered\n * @param {function(value: T): boolean} conditionCallback Predicate function, to test each element of the stream. Return true to keep the element, false otherwise\n * @returns {Subject|BehaviorSubject|ReplaySubject}\n */\nexport function filter(SubjectConstructor, stream$, conditionCallback) {\n  let filteredStream$ = new SubjectConstructor();\n\n  stream$.subscribe(function (payload) {\n    (conditionCallback(payload)) ? filteredStream$.next(payload) : null\n  });\n\n  return filteredStream$;\n}",
     "static": true,
@@ -256,7 +342,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 11,
+    "__docId__": 13,
     "kind": "function",
     "name": "filter",
     "memberof": "src/operators/filter.js",
@@ -331,7 +417,7 @@
     }
   },
   {
-    "__docId__": 12,
+    "__docId__": 14,
     "kind": "file",
     "name": "src/operators/merge.js",
     "content": "/**\n * Merges two or more streams into one.\n *\n * @example\n * import { Subject, BehaviorSubject, merge } from 'rxstream';\n *\n * let first$ = new BehaviorSubject();\n * let second$ = new Subject();\n * let merged$ = merge(Subject, [first$, second$])\n *\n * first$.next(1);\n *\n * merged$.subscribe(value => console.log(value));\n * first$.next(2);\n * second$.next(3);\n * second$.next(4);\n *\n * // Output is going to be: 2, 3, 4.\n * // Notice that despite the fact that merged stream has BehaviorSubject\n * // we are getting in output only 2, 3 and 4 but not 1. This is because we specified\n * // that our result stream should be of type Subject, which does not remember\n * // previous values.\n *\n * @function merge<T>\n * @param {Subject|BehaviorSubject|ReplaySubject} SubjectConstructor Pass a constructor of result/merged stream\n * @param {Array} subjectList An array of subjects/streams to be merged\n * @returns {Subject|BehaviorSubject|ReplaySubject}\n */\nexport function merge(SubjectConstructor, subjectList) {\n  let stream$ = new SubjectConstructor();\n\n  subjectList.forEach(function (subject) {\n    subject.subscribe(payload => stream$.next(payload));\n  });\n\n  return stream$;\n}",
@@ -342,7 +428,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 13,
+    "__docId__": 15,
     "kind": "function",
     "name": "merge",
     "memberof": "src/operators/merge.js",
@@ -405,7 +491,7 @@
     }
   },
   {
-    "__docId__": 14,
+    "__docId__": 16,
     "kind": "file",
     "name": "src/subjects/behaviourSubject.js",
     "content": "import { Subject } from './subject';\n\n/**\n * BehaviorSubject extends Subject. As Subject is a stream of values, BehaviorSubject\n * is also a stream, but a little bit different. The difference is that BehaviorSubject\n * remembers the last value that's been sent to it, and it sends this value to\n * new subscribers. Take a look at example.\n *\n * @example\n * import { BehaviorSubject } from 'rxstream';\n *\n * let stream$ = new BehaviorSubject();\n * stream$.next(1);\n * stream$.next(2);\n *\n * stream$.subscribe(value => console.log(value));\n * stream$.next(3);\n * stream$.next(4);\n *\n * // Output is going ot be: 2,3,4\n *\n * @class BehaviorSubject<T>\n */\nexport class BehaviorSubject extends Subject {\n  constructor() {\n    super();\n    this._lastCallArgs = null;\n  }\n\n  /**\n   * Send value to the stream\n   * @param {any} data Any value\n   */\n  next(data) {\n    this._lastCallArgs = arguments;\n    super.next.apply(this, arguments);\n  };\n\n  /**\n   * Subscribe to the stream\n   * @param {function} callback\n   * @returns {Subscription}\n   */\n  subscribe(callback) {\n    if (this._lastCallArgs) {\n      callback.apply(this, this._lastCallArgs);\n    }\n\n    super.subscribe.apply(this, arguments);\n  }\n}\n",
@@ -416,7 +502,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 15,
+    "__docId__": 17,
     "kind": "class",
     "name": "BehaviorSubject",
     "memberof": "src/subjects/behaviourSubject.js",
@@ -443,7 +529,7 @@
     ]
   },
   {
-    "__docId__": 16,
+    "__docId__": 18,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/subjects/behaviourSubject.js~BehaviorSubject",
@@ -464,7 +550,7 @@
     "params": []
   },
   {
-    "__docId__": 17,
+    "__docId__": 19,
     "kind": "member",
     "name": "_lastCallArgs",
     "memberof": "src/subjects/behaviourSubject.js~BehaviorSubject",
@@ -487,7 +573,7 @@
     }
   },
   {
-    "__docId__": 18,
+    "__docId__": 20,
     "kind": "method",
     "name": "next",
     "memberof": "src/subjects/behaviourSubject.js~BehaviorSubject",
@@ -512,7 +598,7 @@
     ]
   },
   {
-    "__docId__": 19,
+    "__docId__": 21,
     "kind": "member",
     "name": "_lastCallArgs",
     "memberof": "src/subjects/behaviourSubject.js~BehaviorSubject",
@@ -535,7 +621,7 @@
     }
   },
   {
-    "__docId__": 20,
+    "__docId__": 22,
     "kind": "method",
     "name": "subscribe",
     "memberof": "src/subjects/behaviourSubject.js~BehaviorSubject",
@@ -574,7 +660,7 @@
     }
   },
   {
-    "__docId__": 21,
+    "__docId__": 23,
     "kind": "file",
     "name": "src/subjects/replaySubject.js",
     "content": "import { Subject } from './subject';\n\n/**\n * ReplaySubject extends Subject. As Subject is a stream of values, ReplaySubject\n * is also a stream, but a little bit different. The difference is that ReplaySubject\n * remembers all values that's been sent to it, and it sends all these values to\n * new subscribers. Take a look at example.\n *\n * @example\n * import { ReplaySubject } from 'rxstream';\n *\n * let stream$ = new ReplaySubject();\n * stream$.next(1);\n * stream$.next(2);\n *\n * stream$.subscribe(value => console.log(value));\n * stream$.next(3);\n * stream$.next(4);\n *\n * // Output is going ot be: 1,2,3,4\n *\n * @class ReplaySubject<T>\n */\nexport class ReplaySubject extends Subject {\n\n  constructor() {\n    super();\n    this.calls = [];\n  }\n\n  /**\n   * Send value to the stream\n   * @param {any} data Any value\n   */\n  next(data) {\n    this.calls.push(arguments);\n    super.next.apply(this, arguments);\n  };\n\n  /**\n   * Subscribe to the stream\n   * @param {function} callback\n   * @returns {Subscription}\n   */\n  subscribe(callback) {\n    if (this.calls.length) {\n      this.calls.forEach(callArgs => {\n        callback.apply(this, callArgs);\n      });\n    }\n\n    super.subscribe.apply(this, arguments);\n  }\n}",
@@ -585,7 +671,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 22,
+    "__docId__": 24,
     "kind": "class",
     "name": "ReplaySubject",
     "memberof": "src/subjects/replaySubject.js",
@@ -612,7 +698,7 @@
     ]
   },
   {
-    "__docId__": 23,
+    "__docId__": 25,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/subjects/replaySubject.js~ReplaySubject",
@@ -633,7 +719,7 @@
     "params": []
   },
   {
-    "__docId__": 24,
+    "__docId__": 26,
     "kind": "member",
     "name": "calls",
     "memberof": "src/subjects/replaySubject.js~ReplaySubject",
@@ -656,7 +742,7 @@
     }
   },
   {
-    "__docId__": 25,
+    "__docId__": 27,
     "kind": "method",
     "name": "next",
     "memberof": "src/subjects/replaySubject.js~ReplaySubject",
@@ -681,7 +767,7 @@
     ]
   },
   {
-    "__docId__": 26,
+    "__docId__": 28,
     "kind": "method",
     "name": "subscribe",
     "memberof": "src/subjects/replaySubject.js~ReplaySubject",
@@ -720,7 +806,7 @@
     }
   },
   {
-    "__docId__": 27,
+    "__docId__": 29,
     "kind": "file",
     "name": "src/subjects/subject.js",
     "content": "import Subscription from '../classes/subscription';\n\n/**\n * Subject is a stream of values, that were pushed into it.\n *\n * @example\n * import { Subject } from 'rxstream';\n *\n * let stream$ = new Subject();\n * stream$.subscribe(value => console.log(value));\n * stream$.next(1); // 1\n * stream$.next(2); // 2\n *\n * @class Subject<T>\n */\nexport class Subject {\n  constructor() {\n\n    /**\n     * @type {Array}\n     * @private\n     */\n    this._subscriptionList = [];\n  }\n\n  subscriptionList(subscriptionList) {\n    if (subscriptionList instanceof Array) {\n      this._subscriptionList = subscriptionList;\n    }\n\n    return this._subscriptionList;\n  }\n\n  /**\n   * Send value to the stream\n   * @param {any} data Any value\n   */\n  next(data) {\n    this.subscriptionList().forEach(subscription => {\n      subscription._execute(data);\n    });\n  }\n\n  /**\n   * Subscribe to the stream\n   * @param {function} callback\n   * @returns {Subscription}\n   */\n  subscribe(callback) {\n    let subscription = new Subscription(this, callback);\n    this.subscriptionList().push(subscription);\n\n    return subscription;\n  };\n\n  /**\n   * Unsubscribe from the stream\n   * @param {Subscription} subscription\n   */\n  unsubscribe(subscription) {\n    if(!(subscription instanceof Subscription)) {\n      return;\n    }\n\n    this.subscriptionList(this.subscriptionList().filter(_subscription => _subscription !== subscription));\n  };\n}",
@@ -731,7 +817,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 28,
+    "__docId__": 30,
     "kind": "class",
     "name": "Subject",
     "memberof": "src/subjects/subject.js",
@@ -755,7 +841,7 @@
     "interface": false
   },
   {
-    "__docId__": 29,
+    "__docId__": 31,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/subjects/subject.js~Subject",
@@ -776,7 +862,7 @@
     "params": []
   },
   {
-    "__docId__": 30,
+    "__docId__": 32,
     "kind": "member",
     "name": "_subscriptionList",
     "memberof": "src/subjects/subject.js~Subject",
@@ -795,7 +881,7 @@
     }
   },
   {
-    "__docId__": 31,
+    "__docId__": 33,
     "kind": "method",
     "name": "subscriptionList",
     "memberof": "src/subjects/subject.js~Subject",
@@ -828,7 +914,7 @@
     }
   },
   {
-    "__docId__": 32,
+    "__docId__": 34,
     "kind": "member",
     "name": "_subscriptionList",
     "memberof": "src/subjects/subject.js~Subject",
@@ -851,7 +937,7 @@
     }
   },
   {
-    "__docId__": 33,
+    "__docId__": 35,
     "kind": "method",
     "name": "next",
     "memberof": "src/subjects/subject.js~Subject",
@@ -876,7 +962,7 @@
     ]
   },
   {
-    "__docId__": 34,
+    "__docId__": 36,
     "kind": "method",
     "name": "subscribe",
     "memberof": "src/subjects/subject.js~Subject",
@@ -915,7 +1001,7 @@
     }
   },
   {
-    "__docId__": 35,
+    "__docId__": 37,
     "kind": "method",
     "name": "unsubscribe",
     "memberof": "src/subjects/subject.js~Subject",
@@ -940,7 +1026,7 @@
     ]
   },
   {
-    "__docId__": 37,
+    "__docId__": 39,
     "kind": "external",
     "name": "Infinity",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Infinity",
@@ -952,7 +1038,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 38,
+    "__docId__": 40,
     "kind": "external",
     "name": "NaN",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NaN",
@@ -964,7 +1050,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 39,
+    "__docId__": 41,
     "kind": "external",
     "name": "undefined",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined",
@@ -976,7 +1062,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 40,
+    "__docId__": 42,
     "kind": "external",
     "name": "null",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/null",
@@ -988,7 +1074,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 41,
+    "__docId__": 43,
     "kind": "external",
     "name": "Object",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object",
@@ -1000,7 +1086,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 42,
+    "__docId__": 44,
     "kind": "external",
     "name": "object",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object",
@@ -1012,7 +1098,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 43,
+    "__docId__": 45,
     "kind": "external",
     "name": "Function",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function",
@@ -1024,7 +1110,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 44,
+    "__docId__": 46,
     "kind": "external",
     "name": "function",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function",
@@ -1036,7 +1122,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 45,
+    "__docId__": 47,
     "kind": "external",
     "name": "Boolean",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
@@ -1048,7 +1134,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 46,
+    "__docId__": 48,
     "kind": "external",
     "name": "boolean",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
@@ -1060,7 +1146,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 47,
+    "__docId__": 49,
     "kind": "external",
     "name": "Symbol",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol",
@@ -1072,7 +1158,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 48,
+    "__docId__": 50,
     "kind": "external",
     "name": "Error",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error",
@@ -1084,7 +1170,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 49,
+    "__docId__": 51,
     "kind": "external",
     "name": "EvalError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/EvalError",
@@ -1096,7 +1182,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 50,
+    "__docId__": 52,
     "kind": "external",
     "name": "InternalError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/InternalError",
@@ -1108,7 +1194,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 51,
+    "__docId__": 53,
     "kind": "external",
     "name": "RangeError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RangeError",
@@ -1120,7 +1206,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 52,
+    "__docId__": 54,
     "kind": "external",
     "name": "ReferenceError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError",
@@ -1132,7 +1218,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 53,
+    "__docId__": 55,
     "kind": "external",
     "name": "SyntaxError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SyntaxError",
@@ -1144,7 +1230,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 54,
+    "__docId__": 56,
     "kind": "external",
     "name": "TypeError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypeError",
@@ -1156,7 +1242,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 55,
+    "__docId__": 57,
     "kind": "external",
     "name": "URIError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/URIError",
@@ -1168,7 +1254,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 56,
+    "__docId__": 58,
     "kind": "external",
     "name": "Number",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
@@ -1180,7 +1266,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 57,
+    "__docId__": 59,
     "kind": "external",
     "name": "number",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
@@ -1192,7 +1278,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 58,
+    "__docId__": 60,
     "kind": "external",
     "name": "Date",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date",
@@ -1204,7 +1290,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 59,
+    "__docId__": 61,
     "kind": "external",
     "name": "String",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
@@ -1216,7 +1302,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 60,
+    "__docId__": 62,
     "kind": "external",
     "name": "string",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
@@ -1228,7 +1314,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 61,
+    "__docId__": 63,
     "kind": "external",
     "name": "RegExp",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp",
@@ -1240,7 +1326,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 62,
+    "__docId__": 64,
     "kind": "external",
     "name": "Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
@@ -1252,7 +1338,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 63,
+    "__docId__": 65,
     "kind": "external",
     "name": "Int8Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int8Array",
@@ -1264,7 +1350,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 64,
+    "__docId__": 66,
     "kind": "external",
     "name": "Uint8Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array",
@@ -1276,7 +1362,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 65,
+    "__docId__": 67,
     "kind": "external",
     "name": "Uint8ClampedArray",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8ClampedArray",
@@ -1288,7 +1374,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 66,
+    "__docId__": 68,
     "kind": "external",
     "name": "Int16Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int16Array",
@@ -1300,7 +1386,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 67,
+    "__docId__": 69,
     "kind": "external",
     "name": "Uint16Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint16Array",
@@ -1312,7 +1398,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 68,
+    "__docId__": 70,
     "kind": "external",
     "name": "Int32Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int32Array",
@@ -1324,7 +1410,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 69,
+    "__docId__": 71,
     "kind": "external",
     "name": "Uint32Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint32Array",
@@ -1336,7 +1422,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 70,
+    "__docId__": 72,
     "kind": "external",
     "name": "Float32Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array",
@@ -1348,7 +1434,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 71,
+    "__docId__": 73,
     "kind": "external",
     "name": "Float64Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float64Array",
@@ -1360,7 +1446,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 72,
+    "__docId__": 74,
     "kind": "external",
     "name": "Map",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map",
@@ -1372,7 +1458,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 73,
+    "__docId__": 75,
     "kind": "external",
     "name": "Set",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set",
@@ -1384,7 +1470,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 74,
+    "__docId__": 76,
     "kind": "external",
     "name": "WeakMap",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap",
@@ -1396,7 +1482,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 75,
+    "__docId__": 77,
     "kind": "external",
     "name": "WeakSet",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakSet",
@@ -1408,7 +1494,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 76,
+    "__docId__": 78,
     "kind": "external",
     "name": "ArrayBuffer",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer",
@@ -1420,7 +1506,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 77,
+    "__docId__": 79,
     "kind": "external",
     "name": "DataView",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView",
@@ -1432,7 +1518,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 78,
+    "__docId__": 80,
     "kind": "external",
     "name": "JSON",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON",
@@ -1444,7 +1530,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 79,
+    "__docId__": 81,
     "kind": "external",
     "name": "Promise",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise",
@@ -1456,7 +1542,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 80,
+    "__docId__": 82,
     "kind": "external",
     "name": "Generator",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator",
@@ -1468,7 +1554,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 81,
+    "__docId__": 83,
     "kind": "external",
     "name": "GeneratorFunction",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/GeneratorFunction",
@@ -1480,7 +1566,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 82,
+    "__docId__": 84,
     "kind": "external",
     "name": "Reflect",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect",
@@ -1492,7 +1578,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 83,
+    "__docId__": 85,
     "kind": "external",
     "name": "Proxy",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy",
@@ -1505,7 +1591,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 85,
+    "__docId__": 87,
     "kind": "external",
     "name": "CanvasRenderingContext2D",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D",
@@ -1517,7 +1603,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 86,
+    "__docId__": 88,
     "kind": "external",
     "name": "DocumentFragment",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment",
@@ -1529,7 +1615,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 87,
+    "__docId__": 89,
     "kind": "external",
     "name": "Element",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/Element",
@@ -1541,7 +1627,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 88,
+    "__docId__": 90,
     "kind": "external",
     "name": "Event",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/Event",
@@ -1553,7 +1639,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 89,
+    "__docId__": 91,
     "kind": "external",
     "name": "Node",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/Node",
@@ -1565,7 +1651,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 90,
+    "__docId__": 92,
     "kind": "external",
     "name": "NodeList",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/NodeList",
@@ -1577,7 +1663,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 91,
+    "__docId__": 93,
     "kind": "external",
     "name": "XMLHttpRequest",
     "externalLink": "https://developer.mozilla.org/en/docs/Web/API/XMLHttpRequest",
@@ -1589,7 +1675,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 92,
+    "__docId__": 94,
     "kind": "external",
     "name": "AudioContext",
     "externalLink": "https://developer.mozilla.org/en/docs/Web/API/AudioContext",

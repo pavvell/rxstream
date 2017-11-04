@@ -4,6 +4,7 @@ import { ReplaySubject } from '../../es5/subjects/replaySubject';
 import { merge } from '../../es5/operators/merge';
 import { filter } from '../../es5/operators/filter';
 import { combineLatest } from '../../es5/operators/combineLatest';
+import { debounce } from '../../es5/operators/debounce';
 
 describe("operators", function() {
 
@@ -184,6 +185,27 @@ describe("operators", function() {
 
       numbers$.next(1);
       assert.deepEqual(received[0], ['a', 1]);
+      done();
+    });
+  });
+
+  describe("debounce", function() {
+    it("debounced stream should emit the latest values of the source stream when new value arrives on condition stream", function(done) {
+      let clicks$ = new Subject();
+      let condition$ = new Subject();
+      let received = [];
+
+      let debounced$ = debounce(Subject, clicks$, () => condition$);
+      debounced$.subscribe(value => received.push(value));
+
+      clicks$.next(1);
+      clicks$.next(2);
+      clicks$.next(3);
+      clicks$.next(4);
+      condition$.next('a');
+      clicks$.next(5);
+
+      assert.equal(received[0], 4);
       done();
     });
   });
