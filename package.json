@@ -1,6 +1,6 @@
 {
   "name": "rxstream",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "description": "",
   "main": "index.js",
   "repository": {
@@ -25,10 +25,5 @@
     "esdoc": "0.5.2",
     "express": "4.15.3",
     "webpack": "3.0.0"
-  },
-  "babel": {
-    "presets": [
-      "es2015"
-    ]
   }
 }
